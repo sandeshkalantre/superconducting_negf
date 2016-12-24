@@ -1,6 +1,6 @@
 function g = surface_g(E,alpha,beta,eta)
     % error tolerance in the result
-    tolerance = 1e-5;
+    tolerance = 1e-4;
     % maximum number of iterations
     N_lim = 50000;
  
@@ -16,7 +16,7 @@ function g = surface_g(E,alpha,beta,eta)
     % value of g set to inv(alpha) at the start of first iteration
     % it is possible to set other default values to achieve better
     % convergence
-    g = inv(alpha);
+    g = inv(alpha + eta.*eye(2));
     g_last = inv(alpha);
     
     while err > tolerance

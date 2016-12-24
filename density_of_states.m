@@ -72,7 +72,7 @@ beta2 = -t0* [1 0; 0 -1];
 
 % N_E : number of points in the energy grid
 N_E = 1000;
-E_vec = 2 * Delta .* linspace(-1,1,N_E);
+E_vec = 4* t0 .* linspace(-1,1,N_E);
 
 %density of states
 A = zeros(1,length(E_vec));
