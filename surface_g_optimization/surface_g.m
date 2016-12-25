@@ -1,0 +1,40 @@
+function [g,iter_count] = surface_g(E,alpha,beta,eta,chi,tolerance)
+    % maximum number of iterations
+    N_lim = 10000;
+ 
+    % error
+    % set to 1 in at the start of the first iteration
+    err = 1;
+    
+    % iter_count : keep track of number of iterations
+    % if iter_counts exceeds N_lim, display 'Convergence failed' and value
+    % of E
+    iter_count = 0;
+    
+    % value of g set to inv(alpha) at the start of first iteration
+    % it is possible to set other default values to achieve better
+    % convergence
+    g = inv(alpha + eta.*eye(2));
+    g_last = inv(alpha + eta.*eye(2));
+    
+    while err > tolerance
+        g = inv((E + 1i*eta)*eye(2) - alpha - beta'*g*beta);
+        err = norm(g - g_last,1)/norm(g,1);
+        
+        if  err < tolerance
+            break;
+        end
+        
+        % for faster convergence
+        % change 0.5 to different values for getting better results
+        g = g_last + chi * (g - g_last);
+        g_last = g;
+    
+        iter_count = iter_count + 1;
+        if(iter_count == N_lim)
+            disp('Convergence failed for [E err]')
+            disp([E err])
+            break;
+        end
+    end 
+end
