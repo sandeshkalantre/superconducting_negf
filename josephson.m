@@ -99,7 +99,7 @@ for ii = 1:length(phi_vec)
         
         trace = 0;
         for kk = 1:N_D
-            trace = trace + I_op(2*kk-1) - I_op(2*kk);
+            trace = trace + I_op(2*kk-1) + I_op(2*kk);
         end
         I = I + deltaE * (q) * trace;
     end
