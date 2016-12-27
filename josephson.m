@@ -6,6 +6,8 @@
 
 % Calculation of the current vs phase relation
 
+clear;
+
 % eta : 0+ for calculating retarded Green's functions
 eta = 1e-8;
 
@@ -55,7 +57,7 @@ kT = 0.001;
 
 % Delta: Superconducting order paramter
 % Delta units : eV
-Delta = 0.01;
+Delta = 0.001;
 
 % mu1 : electrochemical potential of the left contact
 mu1 = 0.0;
@@ -69,7 +71,7 @@ phi_vec = 2*pi*linspace(0,1,N_phi);
 I_vec = zeros(1,length(phi_vec));
 
 for ii = 1:length(phi_vec)
-    phi = phi_vec(ii)
+    phi = phi_vec(ii);
     
     Delta1 = Delta;
     alpha1 = [2*t0 - mu1 Delta1; conj(Delta1) -2*t0 + mu1];
@@ -92,8 +94,14 @@ for ii = 1:length(phi_vec)
         g1 = surface_g(E,alpha1,beta1,eta);
         g2 = surface_g(E,alpha2,beta2,eta);
         
-        fermi = @(E,mu,kT) 1.0/(1.0 + exp((E - mu)/kT));
-        I = I + deltaE * (q*q/hbar) * trans_ee(E,H_D,g1,g2,eta);
+        G_corr = calc_G_corr(E,H_D,g1,g2,t0,mu1,mu2,kT,eta);
+        I_op = calc_I_op(E,H_D,g1,g2,t0,mu1,mu2,kT,eta);
+        
+        trace = 0;
+        for kk = 1:N_D
+            trace = trace + I_op(2*kk-1) - I_op(2*kk);
+        end
+        I = I + deltaE * (q) * trace;
     end
     
     I_vec(ii) = I;
