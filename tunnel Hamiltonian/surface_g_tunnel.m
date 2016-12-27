@@ -1,8 +1,8 @@
-function g = surface_g(E,alpha,beta,eta)
+function g = surface_g_tunnel(E,alpha,beta,eta)
     % error tolerance in the result
-    tolerance = 1e-2;
+    tolerance = 1e-4;
     % maximum number of iterations
-    N_lim = 1000;
+    N_lim = 50000;
  
     % error
     % set to 1 in at the start of the first iteration
@@ -16,11 +16,11 @@ function g = surface_g(E,alpha,beta,eta)
     % value of g set to inv(alpha) at the start of first iteration
     % it is possible to set other default values to achieve better
     % convergence
-    g = inv(alpha + eta.*eye(2));
+    g = inv(alpha);
     g_last = inv(alpha);
     
     while err > tolerance
-        g = inv((E + 1i*eta)*eye(2) - alpha - beta'*g*beta);
+        g = inv((E + 1j*eta).*eye(2) - alpha - beta'*g*beta);
         err = norm(g - g_last,1)/norm(g,1);
         
         if  err < tolerance
