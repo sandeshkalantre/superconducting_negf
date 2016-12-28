@@ -99,7 +99,7 @@ for ii = 1:length(V_vec)
         %I_op = (1j*q/hbar).*(M * G_corr(3:4,1:2) - G_corr(1:2,3:4)*M');
         
     
-        I = I + q*deltaE * trace(a1)*trace(a2) * (-fermi(E,mu1,kT) + fermi(E,mu2,kT));
+        I = I + q*deltaE * trace(a1)*trace(a2) * (fermi(E,-mu1,kT) + fermi(E,-mu2,kT));
         fermi_func(jj) = fermi(E,mu1,kT) - fermi(E+mu2,0,kT);
     end
     %figure(2)

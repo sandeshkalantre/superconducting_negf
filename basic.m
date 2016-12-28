@@ -74,11 +74,11 @@ for ii = 1:length(V_vec)
     mu2 = 0.0 - V/2;
 
     Delta1 = Delta;
-    alpha1 = [2*t0 - mu1 Delta1; conj(Delta1) -2*t0 + mu1];
+    alpha1 = [2*t0 + mu1 Delta1; conj(Delta1) -2*t0 - mu1];
     beta1 = -t0* [1 0; 0 -1];
 
-    Delta2 = 2*Delta * exp(1j*phi);
-    alpha2 = [2*t0 - mu2 Delta2; conj(Delta2) -2*t0 + mu2];
+    Delta2 = Delta * exp(1j*phi);
+    alpha2 = [2*t0 + mu2 Delta2; conj(Delta2) -2*t0 - mu2];
     beta2 = -t0* [1 0; 0 -1];
     
     I = 0;
@@ -103,7 +103,8 @@ for ii = 1:length(V_vec)
 end
 
 figure(1)
-plot(V_vec./Delta,I_vec,'linewidth',1.5)
-xlabel('$\frac{eV}{\Delta}$','interpreter','latex','fontsize',16);
-ylabel('Current (A)','interpreter','latex','fontsize',16);
-title(['I-V for ' num2str(N_D) ' device point(s) at temperature ' num2str(kT) ' eV'],'interpreter','latex','fontsize',16);
+plot(V_vec./Delta,I_vec,'linewidth',2.0);
+set(gca,'FontSize',20)
+xlabel('$\frac{eV}{\Delta}$','interpreter','latex','fontsize',24);
+ylabel('Current (A)','interpreter','latex','fontsize',24);
+title(['I-V for ' num2str(N_D) ' device point(s) at temperature ' num2str(kT) ' eV'],'interpreter','latex','fontsize',24);
