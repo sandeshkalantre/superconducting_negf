@@ -8,7 +8,7 @@ t = 1.0;
 eta = 1e-8;
 
 % N_D : number of points in the device region
-N_D = 10;
+N_D = 100;
 
 %Fermi level
 mu = 2.0;
@@ -34,4 +34,4 @@ figure(1)
 plot(V_vec,I_vec,'linewidth',1.5);
 xlabel('Voltage (V)','fontsize',16,'interpreter','latex');
 ylabel('Current (I)','fontsize',16,'interpreter','latex');
-title('I-V for N point ballistic device','fontsize',16,'interpreter','latex');
+title('I-V for 100 point ballistic device','fontsize',16,'interpreter','latex');
