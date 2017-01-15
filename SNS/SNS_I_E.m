@@ -7,16 +7,16 @@
 t = 1.0;
 
 % 0+ for the iteration to converge to one of the roots
-eta = 1e-8;
+eta = 1e-6;
 
 % N_D : number of device points
-N_D = 25;
+N_D = 100;
 
 % Electrochemical potentials of the contacts
 % mu : Fermi level of the device
 mu = 0.0;
-mu1 = mu - 0.05;
-mu2 = mu + 0.05;
+mu1 = mu;
+mu2 = mu;
 
 % Temperature kT : [eV]
 kT = 0.0001;
@@ -26,11 +26,11 @@ phi = 0;
 
 % Superconducting order paramter
 Delta1 = 0.001;
-Delta2 = 0.000*exp(1j*phi);
+Delta2 = 0.001*exp(1j*phi);
 
 % N_E : number of points in the energy grid
-N_E = 200;
-E_vec = 0.1* linspace(-1,1,N_E); 
+N_E = 100;
+E_vec = 0.001* linspace(-1,1,N_E); 
 
 I_vec = zeros(1,length(E_vec));
 
