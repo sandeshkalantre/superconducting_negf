@@ -1,25 +1,25 @@
 % Modelling a N-point channel connected to infinite contacts
 % BdG Hamiltonian
 % Author: Sandesh Kalantre
-
+% 
 % Calculation of I vs E 
 % tight-binding parameter [eV]
 t = 1.0;
 
 % 0+ for the iteration to converge to one of the roots
-eta = 1e-6;
+eta = 1e-8;
 
 % N_D : number of device points
-N_D = 100;
+N_D = 2;
 
 % Electrochemical potentials of the contacts
 % mu : Fermi level of the device
-mu = 0.0;
-mu1 = mu;
+mu = 2;
+mu1 = mu + 0.25*1e-3;
 mu2 = mu;
 
 % Temperature kT : [eV]
-kT = 0.0001;
+kT = 0.0000001;
 
 % phase difference betweem the two superconductors
 phi = 0;

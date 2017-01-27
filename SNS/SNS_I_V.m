@@ -11,14 +11,14 @@ q = 1;
 hbar = 1;
     
 % number of points in the device (channel)
-N_D = 25;
+N_D = 2;
 
 % t0 : tight binding parameter = hbar^2/(2 m a^2)
 % t0 units : eV
 t = 1;
 
 % mu : Device Fermi Level
-mu = 2.0;
+mu = 0.0;
 
 % kT : k_B * Temperature(K)
 % kT units : eV
@@ -34,7 +34,7 @@ Delta2 = 0.000*exp(1j*phi);
 
 % N_V : number of points in the voltage grid
 N_V = 100;
-V_vec = 0.004 * linspace(0,1,N_V);
+V_vec = 0.0005 * linspace(0,1,N_V);
 I_vec = zeros(1,length(V_vec));
 
 for ii = 1:length(V_vec)

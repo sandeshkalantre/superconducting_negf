@@ -31,7 +31,7 @@ function I_E = calcuate_I_E(E,t,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
         end
     end
 
-    alpha1 = [2*t-mu1 Delta1; conj(Delta1) -2*t+mu1];
+    alpha1 = [2*t Delta1; conj(Delta1) -2*t];
 
     alpha2 = [2*t Delta2; conj(Delta2) -2*t];
     
