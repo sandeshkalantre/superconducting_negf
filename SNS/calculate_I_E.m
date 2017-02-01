@@ -6,7 +6,7 @@ function I_E = calcuate_I_E(E,t,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
     % Device Hamiltonian (BdG Hamiltonian in the transformed domain)
     % We assume mu = 0 and Delta = 0 in the device region
 
-    alpha = [2*t  0; 0 -2*t];
+    alpha = [2*t 0; 0 -2*t];
     beta = -t* [1 0; 0 -1];
 
     H_D = zeros(2*N_D,2*N_D);
@@ -68,6 +68,5 @@ function I_E = calcuate_I_E(E,t,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
     G_corr = G_D*Sigma_corr*G_D';
     
     I_op = (1j*q/hbar)*(G_corr(3:4,1:2)*H_D(1:2,3:4) - H_D(3:4,1:2)*G_corr(1:2,3:4));
-    I_E = I_op(1,1) + I_op(2,2);
-    
+    I_E = I_op(1,1) + I_op(2,2); 
 end

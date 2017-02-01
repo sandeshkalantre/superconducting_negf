@@ -1,8 +1,8 @@
 function g = surface_g(E,alpha,beta,eta)
     % error tolerance in the result
-    tolerance = 1e-4;
+    tolerance = 1e-5;
     % maximum number of iterations
-    N_lim = 50000;
+    N_lim = 100000;
  
     % error
     % set to 1 in at the start of the first iteration

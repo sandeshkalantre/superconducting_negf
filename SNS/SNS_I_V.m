@@ -23,18 +23,18 @@ mu = 0.0;
 % kT : k_B * Temperature(K)
 % kT units : eV
 % kT default value : 0.026 eV (Room temperature)
-kT = 0.0001;
+kT = 0.00001;
 
 % phase difference betweem the two superconductors
 phi = 0;
 
 % Superconducting order paramter
-Delta1 = 0.001;
+Delta1 = 0.000;
 Delta2 = 0.000*exp(1j*phi);
 
 % N_V : number of points in the voltage grid
 N_V = 100;
-V_vec = 0.0005 * linspace(0,1,N_V);
+V_vec = 0.05 * linspace(0,1,N_V);
 I_vec = zeros(1,length(V_vec));
 
 for ii = 1:length(V_vec)
@@ -46,9 +46,8 @@ for ii = 1:length(V_vec)
     mu2 = mu - V/2;
 
     I_E = @(E) calculate_I_E(E,t,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
-    I_vec(ii) = quadv(I_E,-mu-abs(V/2),-mu+abs(V/2),1e-7) + quadv(I_E,mu-abs(V/2),mu+abs(V/2),1e-7);
+    I_vec(ii) = quadv(I_E,-abs(V),abs(V),1e-4);
 end
-
 figure(1)
 plot(V_vec,I_vec,'linewidth',2.0);
 set(gca,'FontSize',20)
