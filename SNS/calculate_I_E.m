@@ -1,22 +1,24 @@
-function I_E = calcuate_I_E(E,t,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
+function I_E = calcuate_I_E(E,t,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
     % Physical constants
     q = 1.0;
     hbar = 1.0;
     
+    
+    
     % Device Hamiltonian (BdG Hamiltonian in the transformed domain)
     % We assume mu = 0 and Delta = 0 in the device region
 
-    alpha = [2*t - mu   0; 0 -2*t + mu  ];
+    alpha = [2*t - mu  0; 0 -2*t + mu];
     beta = -t* [1 0; 0 -1];
 
     H_D = zeros(2*N_D,2*N_D);
 
     for jj = 1:N_D
         if jj == 1
-            H_D(2*jj-1,2*jj-1) = alpha(1,1);
+            H_D(2*jj-1,2*jj-1) = alpha(1,1) + U;
             H_D(2*jj-1,2*jj) = alpha(1,2) + Delta1;
             H_D(2*jj,2*jj-1) = alpha(2,1) + conj(Delta1);
-            H_D(2*jj,2*jj) = alpha(2,2); 
+            H_D(2*jj,2*jj) = alpha(2,2) - U; 
         elseif jj == N_D
             H_D(2*jj-1,2*jj-1) = alpha(1,1);
             H_D(2*jj-1,2*jj) = alpha(1,2) + Delta2;
@@ -43,9 +45,9 @@ function I_E = calcuate_I_E(E,t,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
         end
     end
 
-    alpha1 = [2*t - mu   Delta1; conj(Delta1) -2*t + mu  ];
+    alpha1 = [2*t - mu  Delta1; conj(Delta1) -2*t + mu ];
 
-    alpha2 = [2*t - mu   Delta2; conj(Delta2) -2*t + mu  ];
+    alpha2 = [2*t - mu   Delta2; conj(Delta2) -2*t + mu ];
     
     g1 = surface_g(E,alpha1,beta,eta);
     g2 = surface_g(E,alpha2,beta,eta);
@@ -70,15 +72,24 @@ function I_E = calcuate_I_E(E,t,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D)
     
     fermi = @(E,mu,kT) 1.0/(1.0 + exp((E - mu)/kT));
     
-    Fermi_matrix1 = [fermi(E,mu1-mu,kT) 0;0 1-fermi(E,-mu1+mu,kT)];
+    Fermi_matrix1 = [fermi(E,mu1-mu,kT) 0;0 fermi(E,-mu1+mu,kT)];
     Fermi1 = kron(eye(N_D),Fermi_matrix1);
     
-    Fermi_matrix2 = [fermi(E,mu2-mu,kT) 0;0 1-fermi(E,-mu2+mu,kT)];
+    Fermi_matrix2 = [fermi(E,mu2-mu,kT) 0;0 fermi(E,-mu2+mu,kT)];
     Fermi2 = kron(eye(N_D),Fermi_matrix2);
     
     Sigma_corr = Gamma1*Fermi1 + Gamma2*Fermi2;
     G_corr = G_D*Sigma_corr*G_D';
     
-    I_op = (1j*q/hbar)*(G_corr(3:4,1:2) - G_corr(1:2,3:4));
-    I_E = I_op(1,1) + I_op(2,2); 
+    %alternate way for G_corr
+    %Sigma = Sigma1 + Sigma2;
+    %g = inv((E + 1j*eta) .* eye(2*N_D) - H_D);
+    %Fermi_matrix = [fermi(E + mu,mu1,kT) 0;0 fermi(-E - mu,-mu,kT)];
+    %Fermi = kron(eye(N_D),Fermi_matrix);
+    %a = 1j*(g - g') * Fermi;
+    %G_corr = (eye(2*N_D) + Sigma*G_D)*a*(eye(2*N_D) + G_D'*Sigma');
+    
+    
+    I_op = (1j*q/hbar)*(H_D(1:2,3:4)*G_corr(3:4,1:2) - H_D(3:4,1:2)*G_corr(1:2,3:4));
+    I_E = 2*I_op(1,1); 
 end
