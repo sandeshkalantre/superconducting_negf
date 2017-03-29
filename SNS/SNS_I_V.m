@@ -17,6 +17,10 @@ N_D = 2;
 % t0 units : eV
 t = 1;
 
+% transmission paramter
+% t value for the coupling element
+trans = 1;
+
 % mu : Device Fermi Level
 mu = 2;
 
@@ -29,12 +33,12 @@ kT = 0.00001;
 phi = 0;
 
 % Superconducting order paramter
-Delta1 = 0;
+Delta1 = 1e-2;
 Delta2 = 1e-2*exp(1j*phi);
 
 % N_V : number of points in the voltage grid
-N_V = 50;
-V_vec = 3e-2 * linspace(0,1,N_V);
+N_V = 100;
+V_vec = 2e-2 * linspace(-1,1,N_V);
 I_vec = zeros(4,length(V_vec));
 
 for ii = 1:length(V_vec)
@@ -46,30 +50,32 @@ for ii = 1:length(V_vec)
     mu2 = mu;
 
     U = 0;
-    I_E = @(E) calculate_I_E(E,t,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
-    I_vec(1,ii) = quadv(I_E,-abs(V),abs(V),1e-4);
-    U = 0.5;
-    I_E = @(E) calculate_I_E(E,t,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
-    I_vec(2,ii) = quadv(I_E,-abs(V),abs(V),1e-4);
-    U = 1;
-    I_E = @(E) calculate_I_E(E,t,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
-    I_vec(3,ii) = quadv(I_E,-abs(V),abs(V),1e-4);
-    U = 2;
-    I_E = @(E) calculate_I_E(E,t,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
-    I_vec(4,ii) = quadv(I_E,-abs(V),abs(V),1e-4);
+    DOS_E = @(E) calculate_DOS(E,t,trans,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
+    E_vec = 1.5*Delta1 * linspace(-1,1,100);
+    DOS = arrayfun(DOS_E,E_vec);
+    figure(2)
+    plot(E_vec,DOS,'linewidth',2.5);
+    drawnow;
+    
+    I_E = @(E) calculate_I_E(E,t,trans,U,mu,mu1,mu2,Delta1,Delta2,kT,eta,N_D);
+    I_vec(1,ii) = integral(I_E,-1.5*abs(V),1.5*abs(V),'AbsTol',1e-8,'ArrayValued',true);
     
 end
 dV = V_vec(2) - V_vec(1);
+%figure(1)
+%conductance
+%plot(V_vec(2:length(V_vec))./Delta2,diff(I_vec(1,:))./dV,'linewidth',2.5);
+%set(gca,'FontSize',20)
+%xlabel('$\frac{eV}{\Delta}$','interpreter','latex','fontsize',24);
+%ylabel('Conductance G ($\frac{e^2}{h}$)','interpreter','latex','fontsize',24);
+%title(['G(V)'],'interpreter','latex','fontsize',24);
+%legend('U = 0','U = 0.5','U = 1.0','U = 2.0');
+
+%IV
 figure(1)
-plot(V_vec/Delta2,[0 diff(I_vec(1,:))]./dV,'linewidth',2.0);
-hold on;
-plot(V_vec/Delta2,[0 diff(I_vec(2,:))]./dV,'linewidth',2.0);
-plot(V_vec/Delta2,[0 diff(I_vec(3,:))]./dV,'linewidth',2.0);
-plot(V_vec/Delta2,[0 diff(I_vec(4,:))]./dV,'linewidth',2.0);
-hold off;
+plot(V_vec./Delta1,I_vec,'linewidth',2.5);
 set(gca,'FontSize',20)
-ylim([0,5])
-xlabel('$\frac{V}{\Delta}$','interpreter','latex','fontsize',20);
-ylabel('Current (I)','interpreter','latex','fontsize',20);
-title(['I(V)'],'interpreter','latex','fontsize',20);
-legend('U = 0','U = 0.5','U = 1.0','U = 2.0');
+xlabel('$\frac{eV}{\Delta_2}$','interpreter','latex','fontsize',24);
+ylabel('I(V)','interpreter','latex','fontsize',24);
+title(['I-V for $\frac{\Delta_1}{\Delta_2} = 1.0$'],'interpreter','latex','fontsize',20);
+
